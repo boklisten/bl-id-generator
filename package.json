@@ -1,0 +1,30 @@
+{
+  "name": "bl-id-generator",
+  "version": "0.0.1",
+  "description": "unique id generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/wizardcoder/bl-id-generator.git"
+  },
+  "author": "wizardcoder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/wizardcoder/bl-id-generator/issues"
+  },
+  "homepage": "https://gitlab.com/wizardcoder/bl-id-generator#readme",
+  "devDependencies": {
+    "ava": "^3.8.2",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.3"
+  },
+  "ava": {
+    "bable": false,
+    "files": ["src/**/*.spec.ts"],
+    "extensions": ["ts"],
+    "require": ["ts-node/register"]
+  }
+}
