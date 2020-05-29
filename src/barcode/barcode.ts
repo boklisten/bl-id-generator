@@ -20,7 +20,7 @@ class Barcode {
   public createPNGStream(id: string): PNGStream {
     const canvas = new Canvas(this._width, this._height);
 
-    JsBarcode(canvas, id, {
+    JsBarcode(canvas, "BL-" + id, {
       fontSize: 20,
       width: 2,
       height: 100,

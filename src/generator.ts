@@ -5,7 +5,7 @@ class Generator {
     const total = numberOfIds ? numberOfIds : 1;
 
     for (let i = 0; i < total; i++) {
-      let randomId = ["B", "L", "-"];
+      let randomId = [];
 
       for (let j = 0; j < 12; j++) {
         randomId.push(
