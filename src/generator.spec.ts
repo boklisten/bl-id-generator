@@ -6,7 +6,7 @@ test("generate() should return a random identification string", t => {
   const id = generator.generate();
 
   t.is(typeof id, "string");
-  t.is(id.length, 12);
+  t.is(id.length, 15);
 });
 
 test("generate() should return x number of unique ids", t => {
@@ -16,6 +16,9 @@ test("generate() should return x number of unique ids", t => {
     const ids = generator.generate(numOfIds);
     t.is(ids.length, numOfIds);
     t.is(typeof ids[0], "string");
-    t.is(ids[0].length, 12);
+    t.is(ids[0].length, 15);
+    t.is(ids[0].charAt(0), "B");
+    t.is(ids[0].charAt(1), "L");
+    t.is(ids[0].charAt(2), "-");
   }
 });
