@@ -11,8 +11,8 @@ class Barcode {
     this._width = 696;
   }
 
-  public print(id: string, stream: PNGStream) {
-    const out = fs.createWriteStream(__dirname + `/output/${id}.png`);
+  public print(id: string, stream: PNGStream, location: string) {
+    const out = fs.createWriteStream(location + id + ".png");
     stream.pipe(out);
     out.on("finish", () => console.log(`PNG ${id}.png created`));
   }
