@@ -1,35 +1,77 @@
-import { Canvas } from "canvas";
-import * as fs from "fs";
+import { spawn } from "child_process";
 
 class Printer {
-  public printQrAndBarcode(
-    id: string,
-    qrcode: Canvas,
-    barcode: Canvas,
-    location: string
-  ): void {
-    const highestCanvas =
-      barcode.height >= qrcode.height ? barcode.height : qrcode.height;
-    const totalHeight = highestCanvas;
-    const totalWidth = qrcode.width + barcode.width;
-    const printCanvas = new Canvas(totalWidth, totalHeight);
+  public async print(
+    imagePaths: string[],
+    numberOfLabelsForEachImage: number
+  ): Promise<boolean> {
+    if (!imagePaths || imagePaths.length <= 0) {
+      throw new TypeError("imagePaths is empty or undefined");
+    }
 
-    const printCtx = printCanvas.getContext("2d");
+    if (!numberOfLabelsForEachImage || numberOfLabelsForEachImage <= 0) {
+      throw new TypeError("numberOfLabelsForEachImage must be at least 1");
+    }
 
-    printCtx.drawImage(qrcode, 0, 0);
-    printCtx.drawImage(barcode, qrcode.width, 0);
-    /*
-    printCtx.drawImage(qrcode, 0, highestCanvas + heightMargin);
-    printCtx.drawImage(barcode, qrcode.width, highestCanvas + heightMargin);
-    */
+    for (let imagePath of imagePaths) {
+      try {
+        await this.printLabels(imagePath, numberOfLabelsForEachImage);
+      } catch (e) {
+        console.log("could not print", e);
+      }
+    }
+    return true;
+  }
 
-    const stream = printCanvas.createPNGStream();
+  private async printLabels(
+    imagePath: string,
+    numberOfLabels: number
+  ): Promise<boolean> {
+    try {
+      for (let i = 1; i < numberOfLabels; i++) {
+        await this.printLabel(imagePath);
+      }
 
-    const out = fs.createWriteStream(location + id + ".png");
-    stream.pipe(out);
+      await this.printLabel(imagePath, true);
+      return true;
+    } catch (e) {
+      throw e;
+    }
+  }
 
-    out.on("finish", () => {
-      console.log(`PNG ${id}.png created`);
+  private printLabel(imagePath: string, cut?: boolean): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let options = [
+        "--backend",
+        "linux_kernel",
+        "--model",
+        "QL-700",
+        "--printer",
+        "/dev/usb/lp1",
+        "print",
+        "--label",
+        "29x90"
+      ];
+
+      if (!cut) {
+        options.push("--no-cut");
+      }
+
+      options.push(imagePath);
+
+      let brotherPrinter = spawn("brother_ql", options);
+
+      brotherPrinter.stderr.on("data", data => {
+        console.log(new Buffer(data).toString("utf8"));
+      });
+
+      brotherPrinter.on("error", error => {
+        reject(error);
+      });
+
+      brotherPrinter.on("close", data => {
+        resolve(true);
+      });
     });
   }
 }
