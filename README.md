@@ -2,9 +2,34 @@
 
 With `bl-id-generator` you can:
 
+- [use a cli for simplicity](#cli)
 - [generate unique IDs](#generate-unique-ids)
 - [print out IDs on labels](#print-out-ids-on-labels)
 - [create PNG files of IDs](#create-png-files-of-ids)
+
+# CLI
+
+The cli is very simple but lets you do all the commands from the terminal. Use
+`ts-node` to run the file `id-generator-cli.ts` which is located in the root
+folder of this repo.
+
+```bash
+ts-node ./id-generator-cli.ts print 10 2
+# where 10 is the number of IDs and 2 is the number of Labels for each ID
+# tries to print X number of IDs with a brother_ql printer
+
+ts-node ./id-generator-cli.ts png 10 ./output/
+# where 10 is the number of IDs and ./output/ is the output location for the files
+# creates PNG files that will be located in the specified location
+
+ts-node ./id-generator-cli.ts generate 10
+# where 10 is the number of IDs generated
+# returns a list of IDs
+
+ts-node ./id-generator-cli.ts
+ts-node ./id-generator-cli.ts --help
+# no arguments or with '--help' prints out information about how to use the cli
+```
 
 # Generate unique IDs
 

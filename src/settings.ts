@@ -1,9 +1,11 @@
+export type PrinterDimensions = "62" | "62x29" | "29x90";
+
 export type IdGeneratorSettings = {
   printer: {
     model: "QL-700";
     location: string;
   };
-  dimension: "62" | "62x29" | "29x90";
+  dimension: PrinterDimensions;
   dimensions: {
     [dimensionId: string]: {
       label: {

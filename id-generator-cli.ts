@@ -1,11 +1,13 @@
 import { idGenerator } from "./src/id-generator";
 import { labelMaker } from "./src/label-maker/label-maker";
+import { PrinterDimensions } from "./src/settings";
 
 const action = process.argv[2];
 
 if (action === "print") {
   const numOfIds = parseInt(process.argv[3]);
   const numOfLabels = parseInt(process.argv[4]);
+  const dimension = process.argv[5] as PrinterDimensions;
 
   if (!numOfIds || numOfIds <= 0 || !numOfLabels || numOfLabels <= 0) {
     console.log("must specify <number of IDs> and <number of labels>");
@@ -15,7 +17,7 @@ if (action === "print") {
   console.log(`printing ${numOfIds} ids with ${numOfLabels} labels each`);
 
   idGenerator
-    .print(numOfIds, numOfLabels)
+    .print(numOfIds, numOfLabels, dimension)
     .then(() => {
       console.log(`printed all ${numOfIds} ids`);
     })
