@@ -1,6 +1,7 @@
 import { generator } from "./generator/generator";
 import { labelMaker } from "./label-maker/label-maker";
 import { printer } from "./printer/printer";
+import { SETTINGS, IdGeneratorSettings } from "./settings";
 
 class IdGenerator {
   public generate(numberOfIds: number): string[] | string {
@@ -33,6 +34,12 @@ class IdGenerator {
     }
 
     return true;
+  }
+
+  public setSettings(settings: IdGeneratorSettings) {
+    SETTINGS.printer = settings.printer;
+    SETTINGS.dimension = settings.dimension;
+    SETTINGS.dimensions = settings.dimensions;
   }
 }
 

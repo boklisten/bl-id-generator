@@ -136,3 +136,58 @@ We use these packages:
     - for running the typescript code without compiling to JS
   - [typescript](https://typescriptlang.org)
     - the language this repo is using
+
+# Settings
+
+To edit sizes of the labels, margin and padding between qrcode and barcode you can do so in the settings file.
+
+```typescript
+type IdGeneratorSettings = {
+  printer: {
+    model: "QL-700";
+    location: string;
+  };
+  dimension: "62" | "62x29" | "29x90";
+  dimensions: {
+    [dimensionId: string]: {
+      label: {
+        height: number; //label height in px
+        width: number; // label width in px
+        margin: number; // label margin in px
+        spaceBetween: number; // space between qrcode and barcode in px
+      };
+      qrcode: {
+        height: number;
+        width: number;
+        scale: number; // the scale of the qr code, 2 is small 18 is large
+        margin: number;
+        paddingTop: number;
+      };
+      barcode: {
+        height: number;
+        width: number;
+        fontSize: number;
+        barcodeWidth: number; // the width of each bar in the barcode
+        barcodeHeight: number; // the height of each bar in the barcode
+        margin: number;
+        marginBottom: number;
+      };
+    };
+  };
+};
+```
+
+You can edit the default settings by calling `setSettings`:
+
+```typescript
+import { idGenerator } from "bl-id-generator";
+
+idGenerator.setSettings({
+  dimension: "62x29",
+  printer: {...},
+  dimensions: {
+      "62x29": {...}
+    }
+  });
+
+```

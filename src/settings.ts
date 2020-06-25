@@ -1,4 +1,4 @@
-type IdGeneratorSettings = {
+export type IdGeneratorSettings = {
   printer: {
     model: "QL-700";
     location: string;
@@ -32,7 +32,7 @@ type IdGeneratorSettings = {
   };
 };
 
-export const SETTINGS: IdGeneratorSettings = {
+export let SETTINGS: IdGeneratorSettings = {
   printer: {
     model: "QL-700",
     location: "/dev/usb/lp1"
