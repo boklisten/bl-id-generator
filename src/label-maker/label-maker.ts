@@ -8,16 +8,21 @@ class LabelMaker {
   private outputLocation: string;
 
   constructor() {
-    this.outputLocation = "/home/ww/bl/bl-id-generator/output/";
+    this.outputLocation = "./.bl-id-generator-temp/";
   }
 
-  public createIdLabelPNGFile(id: string): string {
+  public createIdLabelPNGFile(id: string, location?: string): string {
     const printCanvas = this.combineQRCodeAndBarcode(id);
     const printPNGStream = printCanvas.createPNGStream();
+
+    if (!fs.existsSync(this.outputLocation)) {
+      fs.mkdirSync(this.outputLocation);
+    }
+
     const pngLocation = this.createPNGFile(
       id,
       printPNGStream,
-      this.outputLocation
+      location ? location : this.outputLocation
     );
 
     return pngLocation;

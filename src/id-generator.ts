@@ -2,6 +2,7 @@ import { generator } from "./generator/generator";
 import { labelMaker } from "./label-maker/label-maker";
 import { printer } from "./printer/printer";
 import { SETTINGS, IdGeneratorSettings } from "./settings";
+import * as fs from "fs";
 
 class IdGenerator {
   public generate(numberOfIds: number): string[] | string {
@@ -31,6 +32,17 @@ class IdGenerator {
       await printer.print(labelLocations, numberOfLabels);
     } catch (e) {
       console.log("ERROR printing labels: ", e);
+    }
+
+    for (let location of labelLocations) {
+      await new Promise((resolve, reject) => {
+        fs.unlink(location, error => {
+          if (error) {
+            resolve(false);
+          }
+          resolve(true);
+        });
+      });
     }
 
     return true;
