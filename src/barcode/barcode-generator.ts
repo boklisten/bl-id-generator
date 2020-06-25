@@ -1,19 +1,15 @@
 import * as JsBarcode from "jsbarcode";
 import { Canvas, PNGStream } from "canvas";
+import { SETTINGS } from "../settings";
 
 class BarcodeGenerator {
-  private _height: number;
-  private _width: number;
-
-  constructor() {
-    this._height = 400;
-    this._width = 680;
-  }
-
   public canvas(id: string): Canvas {
     this.validateId(id);
 
-    const canvas = new Canvas(this._width, this._height);
+    const canvas = new Canvas(
+      SETTINGS.dimensions[SETTINGS.dimension].barcode.width,
+      SETTINGS.dimensions[SETTINGS.dimension].barcode.height
+    );
 
     return this.fillCanvasWithBarcode(canvas, id);
   }
@@ -25,11 +21,12 @@ class BarcodeGenerator {
 
   private fillCanvasWithBarcode(canvas: Canvas, id: string): Canvas {
     JsBarcode(canvas, id, {
-      fontSize: 50,
-      width: 4,
-      height: 230,
-      margin: 5,
-      marginBottom: 20,
+      fontSize: SETTINGS.dimensions[SETTINGS.dimension].barcode.fontSize,
+      width: SETTINGS.dimensions[SETTINGS.dimension].barcode.barcodeWidth,
+      height: SETTINGS.dimensions[SETTINGS.dimension].barcode.barcodeHeight,
+      margin: SETTINGS.dimensions[SETTINGS.dimension].barcode.margin,
+      marginBottom:
+        SETTINGS.dimensions[SETTINGS.dimension].barcode.marginBottom,
       text: "BL-" + id
     });
     return canvas;

@@ -1,11 +1,17 @@
 import { Canvas, PNGStream } from "canvas";
 import * as QRCode from "qrcode";
+import { SETTINGS } from "../settings";
 
 class QRCodeGenerator {
+  constructor() {}
+
   public canvas(id: string): Canvas {
     this.validateId(id);
 
-    const canvas = new Canvas(250, 250);
+    const canvas = new Canvas(
+      SETTINGS.dimensions[SETTINGS.dimension].qrcode.width,
+      SETTINGS.dimensions[SETTINGS.dimension].qrcode.height
+    );
 
     return this.fillCanvasWithQRCode(canvas, id);
   }
@@ -18,7 +24,11 @@ class QRCodeGenerator {
     QRCode.toCanvas(
       canvas,
       id,
-      { margin: 2, scale: 10, errorCorrectionLevel: "H" },
+      {
+        margin: SETTINGS.dimensions[SETTINGS.dimension].qrcode.margin,
+        scale: SETTINGS.dimensions[SETTINGS.dimension].qrcode.scale,
+        errorCorrectionLevel: "H"
+      },
       error => {
         if (error) {
           throw error;

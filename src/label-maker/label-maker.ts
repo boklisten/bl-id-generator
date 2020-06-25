@@ -2,6 +2,7 @@ import { barcodeGenerator } from "../barcode/barcode-generator";
 import { qrCodeGenerator } from "../qrcode/qrcode-generator";
 import { Canvas, PNGStream } from "canvas";
 import * as fs from "fs";
+import { SETTINGS } from "../settings";
 
 class LabelMaker {
   private outputLocation: string;
@@ -25,9 +26,9 @@ class LabelMaker {
   private combineQRCodeAndBarcode(id: string): Canvas {
     const barcodeCanvas = barcodeGenerator.canvas(id);
     const qrcodeCanvas = qrCodeGenerator.canvas(id);
-    const totalHeight = 306;
-    const totalWidth = 991;
-    const margin = 10;
+    const totalHeight = SETTINGS.dimensions[SETTINGS.dimension].label.height;
+    const totalWidth = SETTINGS.dimensions[SETTINGS.dimension].label.width;
+    const margin = SETTINGS.dimensions[SETTINGS.dimension].label.margin;
 
     const printCanvas = new Canvas(totalWidth, totalHeight);
 
@@ -35,8 +36,17 @@ class LabelMaker {
     printCtx.fillStyle = "white";
     printCtx.fillRect(0, 0, totalWidth, totalHeight);
 
-    printCtx.drawImage(qrcodeCanvas, margin, 0);
-    printCtx.drawImage(barcodeCanvas, qrcodeCanvas.width + margin, 0);
+    printCtx.drawImage(
+      qrcodeCanvas,
+      0,
+      SETTINGS.dimensions[SETTINGS.dimension].qrcode.paddingTop
+    );
+    printCtx.drawImage(
+      barcodeCanvas,
+      qrcodeCanvas.width +
+        SETTINGS.dimensions[SETTINGS.dimension].label.spaceBetween,
+      0
+    );
 
     return printCanvas;
   }

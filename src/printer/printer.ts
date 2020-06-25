@@ -1,4 +1,5 @@
 import { spawn } from "child_process";
+import { SETTINGS } from "../settings";
 
 class Printer {
   public async print(
@@ -45,12 +46,12 @@ class Printer {
         "--backend",
         "linux_kernel",
         "--model",
-        "QL-700",
+        SETTINGS.printer.model,
         "--printer",
-        "/dev/usb/lp1",
+        SETTINGS.printer.location,
         "print",
         "--label",
-        "29x90"
+        SETTINGS.dimension
       ];
 
       if (!cut) {
@@ -62,7 +63,7 @@ class Printer {
       let brotherPrinter = spawn("brother_ql", options);
 
       brotherPrinter.stderr.on("data", data => {
-        console.log(new Buffer(data).toString("utf8"));
+        console.log(data.toString("utf8"));
       });
 
       brotherPrinter.on("error", error => {
