@@ -2,7 +2,6 @@ import { generator } from "./generator/generator";
 import { labelMaker } from "./label-maker/label-maker";
 import { printer } from "./printer/printer";
 import { SETTINGS, IdGeneratorSettings, PrinterDimensions } from "./settings";
-import * as fs from "fs";
 
 class IdGenerator {
   public generate(numberOfIds: number): string[] | string {
@@ -12,6 +11,7 @@ class IdGenerator {
   public async print(
     numberOfIds: number,
     numberOfLabels: number,
+    printerLocation: string,
     dimension?: PrinterDimensions
   ): Promise<boolean> {
     if (!numberOfIds || numberOfIds <= 0) {
@@ -26,11 +26,13 @@ class IdGenerator {
       this.setDimension(dimension);
     }
 
+    this.setPrinterLocation(printerLocation);
+
     const ids = generator.generate(numberOfIds);
     const labelLocations = [];
 
     for (let id of ids) {
-      labelLocations.push(labelMaker.createIdLabelPNGFile(id));
+      labelLocations.push(labelMaker.createIdLabelPNGFile(id, ids[0]));
     }
 
     try {
@@ -38,19 +40,6 @@ class IdGenerator {
     } catch (e) {
       console.log("ERROR printing labels: ", e);
     }
-
-    /*
-    for (let location of labelLocations) {
-      await new Promise((resolve, reject) => {
-        fs.unlink(location, error => {
-          if (error) {
-            resolve(false);
-          }
-          resolve(true);
-        });
-      });
-    }
-    */
 
     return true;
   }
@@ -63,6 +52,10 @@ class IdGenerator {
 
   private setDimension(dimension: PrinterDimensions) {
     SETTINGS.dimension = dimension;
+  }
+
+  private setPrinterLocation(location: string) {
+    SETTINGS.printer.location = location;
   }
 }
 

@@ -14,9 +14,20 @@ class Printer {
       throw new TypeError("numberOfLabelsForEachImage must be at least 1");
     }
 
+    let i = 1;
+
     for (let imagePath of imagePaths) {
       try {
         await this.printLabels(imagePath, numberOfLabelsForEachImage);
+        const imageNameSplit = imagePath.split("/");
+        const imageName = imageNameSplit[imageNameSplit.length - 1];
+
+        console.log(
+          `(${i}): PRINTED LABEL "${imageName}" - LABELS LEFT TO PRINT: ${
+            imagePaths.length - i
+          }`
+        );
+        i++;
       } catch (e) {
         console.log("could not print", e);
       }
@@ -30,10 +41,8 @@ class Printer {
   ): Promise<boolean> {
     try {
       for (let i = 1; i < numberOfLabels; i++) {
-        await this.printLabel(imagePath);
+        await this.printLabel(imagePath, i == numberOfLabels);
       }
-
-      await this.printLabel(imagePath, true);
       return true;
     } catch (e) {
       throw e;
@@ -63,14 +72,21 @@ class Printer {
       let brotherPrinter = spawn("brother_ql", options);
 
       brotherPrinter.stderr.on("data", data => {
-        console.log(data.toString("utf8"));
+        console.log(">> ERROR when spawning brother_ql");
+        console.error(data.toString("utf8"));
       });
+
+      brotherPrinter.on("message", message => {});
 
       brotherPrinter.on("error", error => {
         reject(error);
       });
 
-      brotherPrinter.on("close", data => {
+      brotherPrinter.on("close", code => {
+        resolve(true);
+      });
+
+      brotherPrinter.on("exit", code => {
         resolve(true);
       });
     });

@@ -11,18 +11,22 @@ class LabelMaker {
     this.outputLocation = "./.bl-id-generator-temp/";
   }
 
-  public createIdLabelPNGFile(id: string, location?: string): string {
+  public createIdLabelPNGFile(
+    id: string,
+    folder: string,
+    location?: string
+  ): string {
     const printCanvas = this.combineQRCodeAndBarcode(id);
     const printPNGStream = printCanvas.createPNGStream();
 
-    if (!fs.existsSync(this.outputLocation)) {
-      fs.mkdirSync(this.outputLocation);
+    if (!fs.existsSync(this.outputLocation + folder + "/")) {
+      fs.mkdirSync(this.outputLocation + folder + "/");
     }
 
     const pngLocation = this.createPNGFile(
       id,
       printPNGStream,
-      location ? location : this.outputLocation
+      this.outputLocation + folder + "/"
     );
 
     return pngLocation;

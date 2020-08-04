@@ -7,7 +7,8 @@ const action = process.argv[2];
 if (action === "print") {
   const numOfIds = parseInt(process.argv[3]);
   const numOfLabels = parseInt(process.argv[4]);
-  const dimension = process.argv[5] as PrinterDimensions;
+  const printerLocation = process.argv[5];
+  //const dimension = process.argv[5] as PrinterDimensions;
 
   if (!numOfIds || numOfIds <= 0 || !numOfLabels || numOfLabels <= 0) {
     console.log("must specify <number of IDs> and <number of labels>");
@@ -15,11 +16,18 @@ if (action === "print") {
   }
 
   console.log(`printing ${numOfIds} ids with ${numOfLabels} labels each`);
+  const startTime = new Date();
 
   idGenerator
-    .print(numOfIds, numOfLabels, dimension)
+    .print(numOfIds, numOfLabels, printerLocation)
     .then(() => {
-      console.log(`printed all ${numOfIds} ids`);
+      console.log(`DONE! Printed all ${numOfIds} ids`);
+      const endTime = new Date();
+      const difference = endTime.getTime() - startTime.getTime();
+      const minutes = Math.floor(difference / 60000);
+      const seconds = ((difference % 60000) / 1000).toFixed(0);
+      const secondsPrint = (parseInt(seconds) < 10 ? "0" : "") + seconds;
+      console.log(`It took ${minutes} minutes and ${secondsPrint} seconds`);
     })
     .catch(e => {
       console.log("failed to print: ", e);
