@@ -40,8 +40,8 @@ class Printer {
     numberOfLabels: number
   ): Promise<boolean> {
     try {
-      for (let i = 1; i < numberOfLabels; i++) {
-        await this.printLabel(imagePath, i == numberOfLabels);
+      for (let i = 0; i < numberOfLabels; i++) {
+        await this.printLabel(imagePath, i == numberOfLabels - 1);
       }
       return true;
     } catch (e) {
@@ -72,8 +72,8 @@ class Printer {
       let brotherPrinter = spawn("brother_ql", options);
 
       brotherPrinter.stderr.on("data", data => {
-        console.log(">> ERROR when spawning brother_ql");
-        console.error(data.toString("utf8"));
+        //console.log(">> ERROR when spawning brother_ql");
+        //console.error(data.toString("utf8"));
       });
 
       brotherPrinter.on("message", message => {});
