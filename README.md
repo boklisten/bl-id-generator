@@ -71,6 +71,9 @@ printing labels you must have it installed.
     `/dev/usb/lp0` This file is by default only accessible with ROOT. You must
     therefore create access to this file for example with `chmod ugo+rwx /dev/usb/lp1`
   - read more about connection to the printer by [reading broter ql's documentation](https://github.com/pklaus/brother_ql#backends)
+- macOS:
+  - Find the printer location with `brother_ql -b pyusb -m QL-700 discover`
+  - Change printer backend to pyusb
 
 > important: printing only works with `brother_ql` compatible printers. As of now it has only been tested with `Brother QL-700`
 
